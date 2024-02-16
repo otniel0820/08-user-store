@@ -22,6 +22,8 @@ export class CustomErrors extends Error {
         return new CustomErrors(404, message)
     }
     static internalServer(message: string){
+        console.log(message);
+        
         return new CustomErrors(500, message)
     }
 
