@@ -12,23 +12,21 @@ export class AuthService {
 
     try {
       const user = new UserModel(registerUserDto);
-      
-      
+
       //encriptacion de contraseña
-      user.password = bcryptAdapter.hash(registerUserDto.password)
-      
+      user.password = bcryptAdapter.hash(registerUserDto.password);
+
       await user.save();
 
       //JWT Para mantener la autenticacion del usuario
 
+      //email de confirmacion
 
-      //email de confirmacion 
-
-      const {password, ...userEntity} = UserEntity.fromObject(user)
+      const { password, ...userEntity } = UserEntity.fromObject(user);
 
       return {
         user: userEntity,
-        token: 'ABC'
+        token: "ABC",
       };
     } catch (error) {
       throw CustomErrors.internalServer(`${error}`);
@@ -36,23 +34,26 @@ export class AuthService {
   }
 
   public async loginUser(loginUserDto: LoginUserDTO) {
+    const user = await UserModel.findOne({ email: loginUserDto.email });
+    if (!user) throw CustomErrors.unAuthorize("Invalid email");
 
-    const user = await UserModel.findOne({ email: loginUserDto.email});
-    if (!user) throw CustomErrors.unAuthorize('Invalid email');
+    const isMatching = bcryptAdapter.compare(
+      loginUserDto.password,
+      user.password
+    );
+    if (!isMatching) throw CustomErrors.unAuthorize("Invalid password");
 
-    const isMatching = bcryptAdapter.compare(loginUserDto.password, user.password);
-    if (!isMatching) throw CustomErrors.unAuthorize('Invalid password');
+    const { password, ...infoUser } = UserEntity.fromObject(user);
 
-    const {password, ...infoUser} = UserEntity.fromObject(user);
+    const token = await JwtGenerator.generateJwt({
+      id: user.id,
+      email: user.email,
+    });
+    if (!token) throw CustomErrors.internalServer("Error generating token");
 
-    const token = await JwtGenerator.generateJwt({id: user.id, email: user.email});
-    if(!token) throw CustomErrors.internalServer('Error generating token');
-
-  
-
-    return{
-        user: infoUser,
-        token
-    }
+    return {
+      user: infoUser,
+      token,
+    };
   }
 }
