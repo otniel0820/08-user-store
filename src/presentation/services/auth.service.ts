@@ -20,13 +20,18 @@ export class AuthService {
 
       //JWT Para mantener la autenticacion del usuario
 
+      const token = await JwtGenerator.generateJwt({
+        id: user.id,
+        email: user.email,
+      });
+      if (!token) throw CustomErrors.internalServer("Error generating token");
       //email de confirmacion
 
       const { password, ...userEntity } = UserEntity.fromObject(user);
 
       return {
         user: userEntity,
-        token: "ABC",
+        token: token,
       };
     } catch (error) {
       throw CustomErrors.internalServer(`${error}`);
