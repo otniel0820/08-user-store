@@ -15,6 +15,7 @@ export class JwtGenerator {
   }
 
   static validateToken(token: string) {
-    return;
+    throw new Error("Method not implemented.");
+    
   }
 }
