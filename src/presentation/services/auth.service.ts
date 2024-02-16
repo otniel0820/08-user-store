@@ -1,4 +1,4 @@
-import { bcryptAdapter } from "../../config";
+import { JwtGenerator, bcryptAdapter } from "../../config";
 import { UserModel } from "../../data";
 import { CustomErrors, RegisterUserDTO, UserEntity } from "../../domain";
 import { LoginUserDTO } from "../../domain/dtos/auth/login-user.dto";
@@ -38,18 +38,21 @@ export class AuthService {
   public async loginUser(loginUserDto: LoginUserDTO) {
 
     const user = await UserModel.findOne({ email: loginUserDto.email});
-    
     if (!user) throw CustomErrors.unAuthorize('Invalid email');
 
     const isMatching = bcryptAdapter.compare(loginUserDto.password, user.password);
-   
     if (!isMatching) throw CustomErrors.unAuthorize('Invalid password');
 
     const {password, ...infoUser} = UserEntity.fromObject(user);
 
+    const token = await JwtGenerator.generateJwt({id: user.id, email: user.email});
+    if(!token) throw CustomErrors.internalServer('Error generating token');
+
+  
+
     return{
         user: infoUser,
-        token:'ABC'
+        token
     }
   }
 }
