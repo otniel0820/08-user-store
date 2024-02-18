@@ -69,7 +69,7 @@ export class AuthService {
 
   private sendEmailValidationLink = async(email: string)=>{
 
-    const token = JwtGenerator.generateJwt({email})
+    const token = await JwtGenerator.generateJwt({email})
     if(!token) throw CustomErrors.internalServer("Error generating token");
 
     const link = `${envs.WEBSERVICE_URL}/auth/validate-email/${token}`;

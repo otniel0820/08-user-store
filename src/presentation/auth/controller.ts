@@ -38,6 +38,12 @@ export class AuthController {
     
   };
   validateEmail = (req: Request, res: Response) => {
-    res.json("validateEmail");
+    const token = req.params.token
+    // this.authService.validateEmail(token)
+    //   .then(()=>res.sendStatus(200).json('Email validate'))
+    //   .catch((error)=>this.handleError(error,res))
+    console.log(token);
+    
+    res.json(token);
   };
 }
