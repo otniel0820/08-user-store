@@ -15,7 +15,15 @@ export class JwtGenerator {
   }
 
   static validateToken(token: string) {
-    throw new Error("Method not implemented.");
+    
+    return new Promise((resolve)=>{
+
+      jwt.verify(token, JWT_SEED, (err, decoded)=>{
+        if(err) return resolve(null)
+
+        resolve(decoded)
+      })
+    })
     
   }
 }
