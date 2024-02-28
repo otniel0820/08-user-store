@@ -1,5 +1,5 @@
 import { CategoryModel } from "../../data";
-import { CreateCategoryDTO, CustomErrors, UserEntity } from "../../domain";
+import { CreateCategoryDTO, CustomErrors, PaginationDTO, UserEntity } from "../../domain";
 
 
 
@@ -32,17 +32,43 @@ export class CategoryService {
 
     }
 
-    async getCategories(){
+    async getCategories(paginationDto: PaginationDTO){
+
+        
+
+        const {page, limit} = paginationDto
 
         try {
 
-            const categories = await CategoryModel.find()
+
+            //con este codigo se hacen dos await  y puede hacer que nuestra aplicacion vaya mas lenta 
+
+            // const total = await CategoryModel.countDocuments()
+            // const categories = await CategoryModel.find()
+            // .skip((page -1 ) * limit)
+            // .limit(limit)
             
-            return categories.map((item)=> ({
-                   id : item.id , 
-                   name : item.name, 
-                   availabel: item.availabe
-                   }))
+            //Por eso aca hacemos una desestructuracion de un Promise all para que se ejecuten todas las promesas por igual
+
+            const [total, categories]  = await Promise.all([
+                CategoryModel.countDocuments(),
+                CategoryModel.find()
+                .skip((page -1 ) * limit)
+                .limit(limit)
+            ])
+            
+            return {
+                page: page,
+                limit: limit,
+                total: total,
+                next: `/api/categories?page=${(page +1)}&limit=${limit}`,
+                prev:(page -1 >0)?`/api/categories?page=${(page -1)}&limit=${limit}`: null,
+                categories: categories.map((category)=> ({
+                    id : category.id , 
+                    name : category.name, 
+                    availabel: category.availabe
+                    }))
+            }
             
         } catch (error) {
             throw CustomErrors.internalServer(`${error}`)
