@@ -24,6 +24,7 @@ export class EmailService {
     mailerService: string,
     mailerEmail: string,
     senderEmailPassword: string,
+    //Esto es para hacer un envio de correo electronico ficticio y no estar enviando correos a cada rato que creemos un usuario
     private readonly postToProvider: boolean
   ) {
     this.transporter = nodemailer.createTransport( {
@@ -43,7 +44,9 @@ export class EmailService {
 
     try {
 
+      //se llama aqui el post to provider para hacer la simulacion de que ya el email a sido enviado
       if (!this.postToProvider) return true
+
       const sentInformation = await this.transporter.sendMail( {
         to: to,
         subject: subject,

@@ -16,7 +16,7 @@ export class AuthRoutes {
       envs.MAILER_SERVICE,
       envs.MAILER_EMAIL,
       envs.MAILER_SECRET_KEY,
-      envs.SEND_EMAIL
+      envs.SEND_EMAIL // Se llama aqui la variable de entorno para que el correo electronico no se envie cada vez que creemos un usuario 
     )
     const authService = new AuthService(emailService)
     const controller = new AuthController(authService)
