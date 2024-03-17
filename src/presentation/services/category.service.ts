@@ -24,7 +24,7 @@ export class CategoryService {
             return {
                 id: category.id,
                 name: category.name,
-                available: category.availabe,
+                available: category.available,
             }
         } catch (error) {
             throw CustomErrors.internalServer(`${error}`)
@@ -66,7 +66,7 @@ export class CategoryService {
                 categories: categories.map((category)=> ({
                     id : category.id , 
                     name : category.name, 
-                    availabel: category.availabe
+                    availabel: category.available
                     }))
             }
             
