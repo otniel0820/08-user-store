@@ -13,6 +13,9 @@ export class CreateProductDto {
   static create(object: { [key: string]: any }): [string?, CreateProductDto?] {
     const { name, available, price, description, user, category } = object;
 
+    console.log('valor de usuario', user);
+    
+
     if (!name) return ["Missing Name"];
     if (!user) return ["Missing User"];
     if (Validators.isMongoId(user)) return ["Invalid User Id"];
@@ -23,7 +26,7 @@ export class CreateProductDto {
       undefined,
       new CreateProductDto(
         name,
-        !!available, // si viene un string sera verdadero sino sera falso por eso se le coloca la doble negacion
+        !!available, // si viene un string sera true sino sera falso por eso se le coloca la doble negacion
         price,
         description,
         user,

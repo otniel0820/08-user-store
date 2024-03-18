@@ -14,7 +14,7 @@ export class ProductsRoutes {
   static get routes(): Router {
 
     const router = Router();
-    const productService = new ProductService
+    const productService = new ProductService()
     const controller = new ProductController(productService);
     
     

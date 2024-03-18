@@ -15,8 +15,7 @@ export class ProductService {
 
         try {
             const product = new ProductModel({
-                ...createProductDto,
-                
+                createProductDto,   
             })
 
             await product.save()
