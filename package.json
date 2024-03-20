@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsnd --respawn --clear src/app.ts",
     "build": "rimraf ./dist && tsc",
-    "start": "npm run build && node dist/app.js"
+    "start": "npm run build && node dist/app.js",
+    "seed": "if [ \"$NODE_ENV\" = \"development\" ]; then ts-node-dev ./src/data/seed/seed.ts; else echo \"No se puede ejecutar en producción\"; fi"
   },
   "keywords": [],
   "author": "",

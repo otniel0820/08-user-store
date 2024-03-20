@@ -11,12 +11,10 @@ export class ProductService {
     async createProduct(createProductDto: CreateProductDto){
 
         const productExists = await ProductModel.findOne({name: createProductDto.name})
-        if(productExists) throw CustomErrors.badRequest('Category already exists')
+        if(productExists) throw CustomErrors.badRequest('Product already exists')
 
         try {
-            const product = new ProductModel({
-                createProductDto,   
-            })
+            const product = new ProductModel(createProductDto)
 
             await product.save()
 
@@ -40,16 +38,17 @@ export class ProductService {
                 ProductModel.find()
                 .skip((page -1 ) * limit)
                 .limit(limit)
-
-                //todo: populate
+                .populate('user')// el populate se usa para hacer la relacion entre tablas y poderlo mostrar en el toJSON en este caso estamos haciendo la relacion con el usuario y por ende se muestra todo lo relacionado al usuario, si le colocamos una coma y un segundo string podemos mostrar lo que nosotros queramos por ejemplo name email si lo hacemos asi en el toJSON del usuario solo se mostrara el name y el email
+                .populate('category')
+                
             ])
             
             return {
                 page: page,
                 limit: limit,
                 total: total,
-                next: `/api/categories?page=${(page +1)}&limit=${limit}`,
-                prev:(page -1 >0)?`/api/categories?page=${(page -1)}&limit=${limit}`: null,
+                next: `/api/products?page=${(page +1)}&limit=${limit}`,
+                prev:(page -1 >0)?`/api/products?page=${(page -1)}&limit=${limit}`: null,
                 products: products
             }
             
