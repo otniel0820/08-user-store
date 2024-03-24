@@ -18,8 +18,8 @@ export class FileUploadRoutes {
     const controller = new FileUploadController()
     
     // Definir las rutas
-    router.get('/single/:type', controller.uploadFile);
-    router.get('/multiple/:type',  controller.uploadMultipleFile );
+    router.post('/single/:type', controller.uploadFile);
+    router.post('/multiple/:type',  controller.uploadMultipleFile );
 
 
 

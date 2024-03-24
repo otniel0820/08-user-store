@@ -13,17 +13,16 @@ export class CreateProductDto {
   static create(object: { [key: string]: any }): [string?, CreateProductDto?] {
     const { name, available, price, description, user, category } = object;
 
-    console.log('user',user);
-    console.log('category', category);
+    
     
     
     
 
     if (!name) return ["Missing Name"];
     if (!user) return ["Missing User"];
-    // if (Validators.isMongoId(user)) return ["Invalid User Id"];
+    if (!Validators.isMongoId(user)) return ["Invalid User Id"];
     if (!category) return ["Missing category"];
-    // if (Validators.isMongoId(category)) return ["Invalid Category Id"];
+    if (!Validators.isMongoId(category)) return ["Invalid Category Id"];
 
     return [
       undefined,
