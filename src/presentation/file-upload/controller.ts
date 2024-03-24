@@ -27,12 +27,13 @@ export class FileUploadController {
     
     }
     
-    if(!req.files || Object.keys(req.files).length === 0) {
-      return res.status(400).json({error:'No files were uploaded.'});
-    }
 
-    const file = req.files.file as UploadedFile
-
+    const file = req.body.files.at(0) as UploadedFile;
+    
+    
+    //Con este log mostramos la informacion que nos trae el body vemos que podemos hacer el multipack de crear usuario producto con toda la informacion que nos arroja el body
+    // console.log({body: req.body});
+    
     this.fileUploadService.upLoadSingleFile(file, `uploads/${type}`)// colocandole el type le podemos enviar al endpoint donde queremos que se guarde el archivo en una subcarpeta en uploads y los permitidos son los que tenemos en la constante validTpes si enviamos algo que no este ahi caera en el error que validamos despues 
     .then(uploaded => res.json(uploaded))
     .catch(error => this.handleError(error, res))
