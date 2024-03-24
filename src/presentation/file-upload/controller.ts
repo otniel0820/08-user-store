@@ -21,13 +21,7 @@ export class FileUploadController {
   uploadFile =  (req: Request, res: Response) => {
     
     const type = req.params.type
-    const validTypes = ['users','products','categories'];
-    if(!validTypes.includes(type)) {
-      return res.status(400).json({error:`Invalid type ${type}, valid ones ${validTypes}`});
-    
-    }
-    
-
+  
     const file = req.body.files.at(0) as UploadedFile;
     
     
@@ -42,20 +36,10 @@ export class FileUploadController {
   uploadMultipleFile =  (req: Request, res: Response) => {
     
     const type = req.params.type
-    const validTypes = ['users','products','categories'];
-    if(!validTypes.includes(type)) {
-      return res.status(400).json({error:`Invalid type ${type}, valid ones ${validTypes}`});
-    
-    }
-    
-
+   
     const files = req.body.files as UploadedFile[];
     
-    
-    //Con este log mostramos la informacion que nos trae el body vemos que podemos hacer el multipack de crear usuario producto con toda la informacion que nos arroja el body
-    // console.log({body: req.body});
-    
-    this.fileUploadService.upLoadMultipleFile(files, `uploads/${type}`)// colocandole el type le podemos enviar al endpoint donde queremos que se guarde el archivo en una subcarpeta en uploads y los permitidos son los que tenemos en la constante validTpes si enviamos algo que no este ahi caera en el error que validamos despues 
+    this.fileUploadService.upLoadMultipleFile(files, `uploads/${type}`)
     .then(uploaded => res.json(uploaded))
     .catch(error => this.handleError(error, res))
   };
